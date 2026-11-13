@@ -6,7 +6,7 @@
   const N = window.N, esc = N.esc, P = (p) => 'pages/' + p + '.html';
   const me = () => N.crew(N.user().crewId || 'crw_1');
   const money = (v, c) => N.fmt.money(v, c || 'USD');
-  const sfHead = (content, title, sub, actions) => content.appendChild(N.header({ title, sub, crumbs: [['My Nyovara', P('seafarer/dashboard')], [title]], actions }));
+  const sfHead = (content, title, sub, actions) => content.appendChild(N.header({ title, sub, crumbs: [['My Nyocrew', P('seafarer/dashboard')], [title]], actions }));
   const completion = (c) => { const keys = ['givenName', 'surname', 'dob', 'nationality', 'placeOfBirth', 'email', 'mobile', 'presentAddress', 'height', 'weight', 'dischargeBook', 'qualification']; let n = keys.filter((k) => c[k]).length; if ((c.nextOfKin || []).length) n++; if (c.photo) n++; if (N.db.where('travelDocs', (t) => t.crewId === c.id).length) n++; return Math.round((n / (keys.length + 3)) * 100); };
 
   /* ---------------- seafarer dashboard ---------------- */
@@ -16,7 +16,7 @@
     const next = N.db.where('crewChanges', (x) => (x.onCrewId === c.id || x.offCrewId === c.id) && !['Completed', 'Cancelled'].includes(x.status))[0];
     const drafts = N.db.where('restRecords', (r) => r.crewId === c.id && ['Draft', 'Correction Requested'].includes(r.status));
     const wk = Array.from({ length: 7 }, (_, k) => N.addDays(N.today(), -k)).map((d) => N.RH.evaluate(c.id, d));
-    document.title = 'My Nyovara · Nyovara';
+    document.title = 'My Nyocrew · Nyocrew';
     content.appendChild(N.h(`<div class="sf-hero mb-3">${N.avatar(c.givenName + ' ' + c.surname, c.photo && c.photo.data, 'lg')}<div class="grow"><div class="small" style="color:#CFE0F1">Welcome back</div><h2>${esc(c.givenName)} ${esc(c.surname)}</h2><div class="small" style="color:#CFE0F1">${esc(c.rank)} · ${esc(c.code)} · ${c.vesselId ? esc(N.vesselName(c.vesselId)) : 'Ashore'}</div></div><div style="min-width:200px"><div class="row between small"><span>Profile completion</span><b>${pct}%</b></div><div class="progress mt-1" style="background:rgba(255,255,255,.2)"><span style="width:${pct}%"></span></div>${pct < 100 ? `<a href="${N.url(P('seafarer/profile'))}" class="small" style="color:#9FE3FF">Complete your profile →</a>` : ''}</div></div>`));
     content.appendChild(N.h(`<div class="quick mb-3">${[['Record rest', 'clock', 'seafarer/rest-hours'], ['Documents', 'folder-open', 'seafarer/documents'], ['Welfare', 'heart-handshake', 'seafarer/welfare'], ['Payslips', 'wallet', 'seafarer/payroll'], ['Training', 'graduation-cap', 'seafarer/training'], ['Employment', 'briefcase', 'seafarer/employment'], ['Profile', 'user-round', 'seafarer/profile'], ['Jobs', 'search', 'public/careers']].map(([l, i, p]) => `<a href="${N.url(P(p))}"><span class="qi">${N.ico(i)}</span>${l}</a>`).join('')}</div>`));
     const g = N.h('<div class="grid g2"></div>'); content.appendChild(g);

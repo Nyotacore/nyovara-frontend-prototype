@@ -1,5 +1,5 @@
 /* =========================================================================
-   NYOVARA REST-HOURS ENGINE (frontend demonstration)
+   NYOCREW REST-HOURS ENGINE (frontend demonstration)
    - 30-minute resolution; each record is one ship's day for one seafarer.
    - Rolling 24-hour windows ending at every slot boundary of the day.
    - Rolling 7-day (168h) windows; continuous / split rest detection;

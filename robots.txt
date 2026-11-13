@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /pages/authentication/
-Sitemap: https://nyovara.nyotacoreltd.com/sitemap.xml
+Sitemap: https://nyocrew.nyotacoreltd.com/sitemap.xml

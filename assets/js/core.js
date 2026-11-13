@@ -1,5 +1,5 @@
 /* =========================================================================
-   NYOVARA FRONTEND CORE
+   NYOCREW FRONTEND CORE
    Demo store · utilities · UI components · layout shell · page router
    DEMONSTRATION ONLY: persistence is browser localStorage; authentication,
    authorisation and all compliance/financial calculations are re-implemented
@@ -71,7 +71,7 @@
   };
 
   /* ----------------------------- demo store ---------------------------- */
-  const KEY = 'nyovara.demo.v1';
+  const KEY = 'nyocrew.demo.v1';
   let mem = null, lsOk = true;
   function load() {
     if (mem) return mem;
@@ -102,7 +102,7 @@
     remove(c, id) { const d = load(); const before = N.db.get(c, id); d[c] = N.db.all(c).filter((x) => String(x.id) !== String(id)); N.audit('Record deleted', c, before || { id }); persist(); },
     set(key, val) { load()[key] = val; persist(); },
     getKey(key, def) { const d = load(); return d[key] === undefined ? def : d[key]; },
-    reset() { try { localStorage.removeItem(KEY); localStorage.removeItem('nyovara.session'); } catch (e) {} mem = null; },
+    reset() { try { localStorage.removeItem(KEY); localStorage.removeItem('nyocrew.session'); } catch (e) {} mem = null; },
     persist
   };
   N.audit = (action, entity, rec, before) => {
@@ -122,12 +122,12 @@
     platform: { name: 'Tunde Bakare', email: 'ops@nyotacoreltd.com', role: 'Platform Administrator', org: 'NyotaCore Solutions & Services', portal: 'platform', perms: ['platform.*'] }
   };
   N.user = () => {
-    let s = null; try { s = JSON.parse(localStorage.getItem('nyovara.session') || 'null'); } catch (e) {}
+    let s = null; try { s = JSON.parse(localStorage.getItem('nyocrew.session') || 'null'); } catch (e) {}
     const portal = (body && body.dataset.portal) || 'app';
     if (s && s.portal === portal) return s;
     return N.users[portal] || N.users.app;
   };
-  N.setSession = (u) => { try { localStorage.setItem('nyovara.session', JSON.stringify(u)); } catch (e) {} };
+  N.setSession = (u) => { try { localStorage.setItem('nyocrew.session', JSON.stringify(u)); } catch (e) {} };
   N.can = (perm) => { const p = N.user().perms || []; if (p.includes('*')) return true; return p.some((x) => x === perm || (x.endsWith('.*') && perm.startsWith(x.slice(0, -1)))); };
   N.viewRole = () => N.db.getKey('viewAsRole', null);
 
@@ -244,11 +244,11 @@
     N.audit('Export (' + format.toUpperCase() + ')', 'reports', { ref: name }); N.db.persist();
     if (format !== 'pdf') N.toast(`${rows.length} records exported to ${format === 'csv' ? 'CSV' : 'Excel'}.`, 'success', 'Export ready');
   };
-  N.reportHeader = (title, sub) => `<div class="rp-head"><div><img src="${N.root}assets/images/logo.png" alt="Nyovara"><div class="muted small" style="margin-top:6px">${esc(N.user().org || 'Atlantic Meridian Shipmanagement')}</div></div><div class="text-right"><h3 style="margin:0">${esc(title)}</h3><div class="muted small">${esc(sub || '')}</div><div class="muted small">Generated ${N.fmt.dateTime(new Date())} by ${esc(N.user().name)}</div></div></div>`;
+  N.reportHeader = (title, sub) => `<div class="rp-head"><div><img src="${N.root}assets/images/logo.png" alt="Nyocrew"><div class="muted small" style="margin-top:6px">${esc(N.user().org || 'Atlantic Meridian Shipmanagement')}</div></div><div class="text-right"><h3 style="margin:0">${esc(title)}</h3><div class="muted small">${esc(sub || '')}</div><div class="muted small">Generated ${N.fmt.dateTime(new Date())} by ${esc(N.user().name)}</div></div></div>`;
   N.printReport = (title, html, sub) => {
     const w = window.open('', '_blank');
     if (!w) { N.toast('Allow pop-ups to print / save as PDF.', 'warning'); return; }
-    w.document.write(`<!doctype html><html><head><title>${esc(title)}</title><link rel="stylesheet" href="${new URL(N.root + 'assets/css/nyovara.css', location.href).href}"><style>body{background:#fff;padding:24px}.report-paper{box-shadow:none;border:0;padding:0}@page{margin:14mm}</style></head><body><div class="report-paper">${N.reportHeader(title, sub).replace(/src="[^"]*logo.png"/, `src="${new URL(N.root + 'assets/images/logo.png', location.href).href}"`)}${html}<p class="muted small" style="margin-top:20px">Nyovara demonstration report — confidential. Generated from prototype demonstration data.</p></div><script>setTimeout(()=>window.print(),400)<\/script></body></html>`);
+    w.document.write(`<!doctype html><html><head><title>${esc(title)}</title><link rel="stylesheet" href="${new URL(N.root + 'assets/css/nyocrew.css', location.href).href}"><style>body{background:#fff;padding:24px}.report-paper{box-shadow:none;border:0;padding:0}@page{margin:14mm}</style></head><body><div class="report-paper">${N.reportHeader(title, sub).replace(/src="[^"]*logo.png"/, `src="${new URL(N.root + 'assets/images/logo.png', location.href).href}"`)}${html}<p class="muted small" style="margin-top:20px">Nyocrew demonstration report — confidential. Generated from prototype demonstration data.</p></div><script>setTimeout(()=>window.print(),400)<\/script></body></html>`);
     w.document.close();
   };
 
@@ -274,9 +274,9 @@
     const bulkBox = N.h('<div class="row bulk hidden"></div>'); tb.appendChild(bulkBox);
     if (cfg.export !== false) {
       tb.appendChild(N.menu([
-        { label: 'Export CSV', icon: 'file-text', onClick: () => N.exportRows('csv', cfg.exportName || 'nyovara-export', visCols(), filtered()) },
-        { label: 'Export Excel', icon: 'file-spreadsheet', onClick: () => N.exportRows('xls', cfg.exportName || 'nyovara-export', visCols(), filtered()) },
-        { label: 'PDF / Print', icon: 'printer', onClick: () => N.exportRows('pdf', cfg.exportName || 'nyovara-export', visCols(), filtered(), cfg.title || cfg.exportTitle) }
+        { label: 'Export CSV', icon: 'file-text', onClick: () => N.exportRows('csv', cfg.exportName || 'nyocrew-export', visCols(), filtered()) },
+        { label: 'Export Excel', icon: 'file-spreadsheet', onClick: () => N.exportRows('xls', cfg.exportName || 'nyocrew-export', visCols(), filtered()) },
+        { label: 'PDF / Print', icon: 'printer', onClick: () => N.exportRows('pdf', cfg.exportName || 'nyocrew-export', visCols(), filtered(), cfg.title || cfg.exportTitle) }
       ], `${N.ico('download')}`, 'export-dd'));
       N.$('.export-dd [data-dd]', tb).className = 'btn btn-outline btn-sm'; N.$('.export-dd [data-dd]', tb).insertAdjacentHTML('beforeend', 'Export');
     }
@@ -555,7 +555,7 @@
     const el = N.h(`<div class="page-head"><div><div class="crumbs">${crumbs}</div><h1>${esc(o.title)}</h1>${o.sub ? `<p>${o.sub}</p>` : ''}</div><div class="row ph-actions"></div></div>`);
     const act = N.$('.ph-actions', el);
     (o.actions || []).forEach((a) => { if (!a || a.hidden) return; if (a.el) { act.appendChild(a.el); return; } const b = a.href ? N.h(`<a class="btn ${a.cls || 'btn-primary'}" href="${a.href}">${a.icon ? N.ico(a.icon) : ''}${esc(a.label)}</a>`) : N.h(`<button class="btn ${a.cls || 'btn-primary'}">${a.icon ? N.ico(a.icon) : ''}${esc(a.label)}</button>`); if (a.onClick) b.onclick = () => a.onClick(b); act.appendChild(b); });
-    document.title = `${o.title} · Nyovara`;
+    document.title = `${o.title} · Nyocrew`;
     return el;
   };
 

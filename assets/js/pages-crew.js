@@ -263,7 +263,7 @@
     const sample = 'employee_code,given_name,surname,rank,department,nationality,date_of_birth,email\nAMS-2001,Kunle,Adebayo,Able Seaman,Deck,Nigerian,1994-03-12,kunle.a@mail.com\nAMS-1001,Duplicate,Code,Oiler,Engine,Ghanaian,1990-01-01,dup@mail.com\nAMS-2003,Maria,,Messman,Catering,Filipino,1998-07-30,maria@mail\nAMS-2004,Rohan,Das,Fitter,Engine,Indian,1989-11-02,rohan.das@mail.com';
     const body = N.h(`<div><p class="muted">Upload a CSV file with crew records or paste data below. Each row is validated individually and failed rows are reported without blocking valid rows.</p><div class="row mb-2"><input type="file" accept=".csv,.txt" class="input" style="padding-top:7px"><button class="btn btn-ghost btn-sm" data-tpl>${N.ico('download')}Download template</button></div><textarea class="input mono" rows="7">${sample}</textarea><div class="mt-2" data-res></div></div>`);
     N.$('input[type=file]', body).onchange = (e) => { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = () => (N.$('textarea', body).value = fr.result); fr.readAsText(f); };
-    N.$('[data-tpl]', body).onclick = () => { const b = new Blob([sample.split('\n')[0] + '\n'], { type: 'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'nyovara-crew-import-template.csv'; a.click(); };
+    N.$('[data-tpl]', body).onclick = () => { const b = new Blob([sample.split('\n')[0] + '\n'], { type: 'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'nyocrew-crew-import-template.csv'; a.click(); };
     let parsed = [];
     const validate = () => {
       const lines = N.$('textarea', body).value.trim().split(/\r?\n/); const hdr = lines.shift().split(',').map((h) => h.trim());
@@ -446,7 +446,7 @@
     const render = () => {
       c = N.db.get('crew', id); content.innerHTML = '';
       content.appendChild(N.h(`<div class="crumbs mb-2"><a href="${N.url(P('crew/index'))}">Crew Management</a>${N.ico('chevron-right')}<a href="${N.url(P('crew/directory'))}">Crew Directory</a>${N.ico('chevron-right')}<span>${esc(fullName(c))}</span></div>`));
-      document.title = fullName(c) + ' · Nyovara';
+      document.title = fullName(c) + ' · Nyocrew';
       const sea = N.db.where('seaService', (s) => s.crewId === c.id); const seaDays = N.sum(sea, (s) => N.seaDuration(s.signOn, s.signOff));
       const contract = N.db.where('contracts', (x) => x.crewId === c.id).sort((a, b) => (a.start < b.start ? 1 : -1))[0];
       const hero = N.h(`<div class="profile-hero">${N.avatar(fullName(c), c.photo && c.photo.data, 'lg')}<div><h2>${esc(fullName(c))}</h2><div class="meta"><span>${N.ico('hash')}${esc(c.code)}</span><span>${N.ico('badge-check')}${esc(c.rank)}</span><span>${N.ico('layers')}${esc(c.department)}</span><span>${N.ico('flag')}${esc(c.nationality)}</span><span>${N.ico('ship')}${c.vesselId ? esc(N.vesselName(c.vesselId)) : 'Ashore'}</span></div><div class="row mt-1">${N.badge(c.status)}${c.blacklisted ? N.badge('Blacklisted') : ''}${c.notRecommended ? N.badge('Not Recommended') : ''}${c.inactive ? N.badge('Inactive') : ''}</div></div><div class="actions"></div></div>`);

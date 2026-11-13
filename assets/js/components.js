@@ -1,5 +1,5 @@
 /* =========================================================================
-   NYOVARA RESOURCE SCREENS — configurable list/create/edit/view/workflow
+   NYOCREW RESOURCE SCREENS — configurable list/create/edit/view/workflow
    screens used by most modules (consistent behaviour everywhere).
    ========================================================================= */
 (function () {

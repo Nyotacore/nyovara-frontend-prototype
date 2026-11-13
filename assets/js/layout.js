@@ -1,5 +1,5 @@
 /* =========================================================================
-   NYOVARA LAYOUT SHELL — sidebar navigation, top bar, global search,
+   NYOCREW LAYOUT SHELL — sidebar navigation, top bar, global search,
    notification centre, user menu, demo controls. One shell, four portals.
    ========================================================================= */
 (function () {
@@ -29,7 +29,7 @@
       { label: 'Settings', icon: 'settings', perm: 'settings', children: [['Organisation', 'administration/settings'], ['Users', 'administration/users'], ['Roles & Permissions', 'administration/roles'], ['Reference Data', 'administration/reference-data'], ['Approval Workflows', 'administration/workflows'], ['Notification Settings', 'administration/notifications'], ['Integrations', 'administration/integrations'], ['Audit Logs', 'administration/audit-logs'], ['Onboarding Wizard', 'authentication/onboarding']] }
     ],
     seafarer: [
-      { section: 'My Nyovara' },
+      { section: 'My Nyocrew' },
       { label: 'Dashboard', icon: 'layout-dashboard', href: P('seafarer/dashboard') },
       { label: 'My Profile', icon: 'user-round', href: P('seafarer/profile') },
       { label: 'My Documents', icon: 'folder-open', href: P('seafarer/documents') },
@@ -100,10 +100,10 @@
     const body = document.body; body.classList.add('portal-' + portal);
     const content = N.$('#content'); content.classList.add('content');
     const u = N.user();
-    try { if (localStorage.getItem('nyovara.sb') === '1') body.classList.add('sb-collapsed'); } catch (e) {}
+    try { if (localStorage.getItem('nyocrew.sb') === '1') body.classList.add('sb-collapsed'); } catch (e) {}
     const nav = N.NAV[portal] || [];
     const cur = N.route;
-    const sb = N.h(`<aside class="sidebar" aria-label="Main navigation"><div class="sb-brand"><a href="${N.url(PORTAL[portal].home)}"><img class="full" src="${N.root}assets/images/logo-light.png" alt="Nyovara"><img class="mark" src="${N.root}assets/icons/favicon-64.png" alt="Nyovara"></a></div><div class="sb-portal">${N.ico(PORTAL[portal].icon)}<div><b>${esc(PORTAL[portal].name)}</b>${esc(u.org || (portal === 'seafarer' ? 'Personal account' : ''))}</div></div><nav class="sb-nav"></nav><div class="sb-foot">Nyovara v1.0 · Prototype<br>© NyotaCore Solutions &amp; Services</div></aside>`);
+    const sb = N.h(`<aside class="sidebar" aria-label="Main navigation"><div class="sb-brand"><a href="${N.url(PORTAL[portal].home)}"><img class="full" src="${N.root}assets/images/logo-light.png" alt="Nyocrew"><img class="mark" src="${N.root}assets/icons/favicon-64.png" alt="Nyocrew"></a></div><div class="sb-portal">${N.ico(PORTAL[portal].icon)}<div><b>${esc(PORTAL[portal].name)}</b>${esc(u.org || (portal === 'seafarer' ? 'Personal account' : ''))}</div></div><nav class="sb-nav"></nav><div class="sb-foot">Nyocrew v1.0 · Prototype<br>© NyotaCore Solutions &amp; Services</div></aside>`);
     const navEl = N.$('.sb-nav', sb);
     nav.forEach((it) => {
       if (it.section) { navEl.appendChild(N.h(`<div class="sb-section">${esc(it.section)}</div>`)); return; }
@@ -149,18 +149,18 @@
       { label: 'Login history', icon: 'history', onClick: () => N.loginHistoryModal() },
       '-',
       { label: 'Reset demo data', icon: 'rotate-ccw', onClick: () => N.resetDemo() },
-      { label: 'Sign out', icon: 'log-out', danger: true, onClick: () => { N.audit('Logout', 'auth', { ref: u.email }); N.db.persist(); try { localStorage.removeItem('nyovara.session'); } catch (e) {} location.href = N.url(P('authentication/login')) + '?signedout=1'; } }
+      { label: 'Sign out', icon: 'log-out', danger: true, onClick: () => { N.audit('Logout', 'auth', { ref: u.email }); N.db.persist(); try { localStorage.removeItem('nyocrew.session'); } catch (e) {} location.href = N.url(P('authentication/login')) + '?signedout=1'; } }
     ].filter(Boolean);
     items.forEach((i) => { if (i === '-') { umm.appendChild(document.createElement('hr')); return; } const b = i.href ? N.h(`<a href="${i.href}">${N.ico(i.icon)}${esc(i.label)}</a>`) : N.h(`<button class="${i.danger ? 'danger' : ''}">${N.ico(i.icon)}${esc(i.label)}</button>`); if (i.onClick) b.onclick = i.onClick; umm.appendChild(b); });
     tba.appendChild(um);
 
     content.parentNode.insertBefore(sb, content);
     sb.after(main); main.appendChild(content);
-    main.appendChild(N.h(`<footer class="app-foot no-print"><span>© ${new Date().getFullYear()} NyotaCore Solutions &amp; Services · Nyovara</span><span><a href="${N.url(P('public/privacy'))}">Privacy</a> · <a href="${N.url(P('public/terms'))}">Terms</a> · <a href="${N.url(P('public/contact'))}">Support</a></span></footer>`));
+    main.appendChild(N.h(`<footer class="app-foot no-print"><span>© ${new Date().getFullYear()} NyotaCore Solutions &amp; Services · Nyocrew</span><span><a href="${N.url(P('public/privacy'))}">Privacy</a> · <a href="${N.url(P('public/terms'))}">Terms</a> · <a href="${N.url(P('public/contact'))}">Support</a></span></footer>`));
     const wrapApp = N.h('<div class="app"></div>'); sb.parentNode.insertBefore(wrapApp, sb); wrapApp.appendChild(sb); wrapApp.appendChild(main);
     wrapApp.appendChild(N.h('<div class="sb-overlay"></div>'));
     N.$('.sb-overlay').onclick = () => body.classList.remove('sb-open');
-    N.$('[data-burger]', main).onclick = () => { if (innerWidth <= 860) body.classList.toggle('sb-open'); else { body.classList.toggle('sb-collapsed'); try { localStorage.setItem('nyovara.sb', body.classList.contains('sb-collapsed') ? '1' : '0'); } catch (e) {} } };
+    N.$('[data-burger]', main).onclick = () => { if (innerWidth <= 860) body.classList.toggle('sb-open'); else { body.classList.toggle('sb-collapsed'); try { localStorage.setItem('nyocrew.sb', body.classList.contains('sb-collapsed') ? '1' : '0'); } catch (e) {} } };
     N.$('[data-reset]', main).onclick = () => N.resetDemo();
     if (portal === 'seafarer') {
       const bn = N.h(`<nav class="bottom-nav">${[['Home', 'layout-dashboard', 'seafarer/dashboard'], ['Documents', 'folder-open', 'seafarer/documents'], ['Rest', 'clock', 'seafarer/rest-hours'], ['Welfare', 'heart-handshake', 'seafarer/welfare'], ['Pay', 'wallet', 'seafarer/payroll']].map(([l, i, p]) => `<a href="${N.url(P(p))}" class="${P(p) === cur ? 'active' : ''}">${N.ico(i)}${l}</a>`).join('')}</nav>`);

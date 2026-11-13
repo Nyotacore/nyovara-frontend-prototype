@@ -1,4 +1,4 @@
-# PROJECT_STATUS — Nyovara
+# PROJECT_STATUS — Nyocrew
 
 **Phase:** 1 — Complete frontend prototype · **Status:** Ready for review · **Updated:** 13 Nov 2026
 

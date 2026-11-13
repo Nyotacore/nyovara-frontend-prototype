@@ -12,11 +12,11 @@
 
 ## Production target (PRD 2.3)
 A modular monolith:
-- `Nyovara.Domain`: entities, value objects, rest-hours rule engine
-- `Nyovara.Application`: use cases, validation, permissions
-- `Nyovara.Infrastructure`: EF Core, SQL Server, storage, email/SMS adapters
-- `Nyovara.Web`: MVC views from these pages plus `/api/v1`
-- `Nyovara.Worker`: expiry alerts, sync processing, backups
+- `Nyocrew.Domain`: entities, value objects, rest-hours rule engine
+- `Nyocrew.Application`: use cases, validation, permissions
+- `Nyocrew.Infrastructure`: EF Core, SQL Server, storage, email/SMS adapters
+- `Nyocrew.Web`: MVC views from these pages plus `/api/v1`
+- `Nyocrew.Worker`: expiry alerts, sync processing, backups
 
 Hosting: Windows Server / IIS over HTTPS.
 
