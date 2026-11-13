@@ -2,6 +2,7 @@ name: Deploy nyovara to cPanel
 
 # push to main    -> live    (/nyovara.nyotacoreltd.com)
 # push to staging -> staging (/staging.nyovara.nyotacoreltd.com)
+# Static multi-page site: no build step, files are uploaded as-is.
 on:
   push:
     branches: [main, staging]
@@ -18,48 +19,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci || npm install
-
-      - name: Build
-        run: npm run build --if-present
-
-      - name: Locate build output
-        id: out
+      - name: Assemble publish folder
         run: |
           set -e
-          DIR="${{ vars.BUILD_DIR }}"
-          if [ -z "$DIR" ]; then
-            for d in dist build out; do
-              if [ -d "$d" ] && [ -n "$(ls -A "$d" 2>/dev/null)" ]; then DIR="$d"; break; fi
-            done
-          fi
-          if [ -z "$DIR" ] || [ ! -d "$DIR" ]; then
-            echo "Could not find build output (looked for dist/build/out)."
-            echo "Set a repo Variable BUILD_DIR to your output folder and re-run."
-            exit 1
-          fi
-          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
-          echo "Publishing from: $DIR"
-          ls -A "$DIR"
-
-      - name: SPA routing fallback (.htaccess)
-        run: |
-          cat > "${{ steps.out.outputs.dir }}/.htaccess" <<'EOF'
-          <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /
-            RewriteRule ^index\.html$ - [L]
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteCond %{REQUEST_FILENAME} !-d
-            RewriteRule . /index.html [L]
-          </IfModule>
-          EOF
+          rm -rf publish && mkdir publish
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='tools' \
+            --exclude='publish' \
+            --exclude='*.md' \
+            --exclude='.gitignore' \
+            --exclude='.ftp-deploy-state.json' \
+            ./ publish/
+          echo "---- publish/ contents ----"
+          ls -A publish
 
       - name: Choose target directory
         id: target
@@ -80,10 +54,10 @@ jobs:
           password:   ${{ secrets.FTP_PASSWORD }}
           port:       ${{ vars.FTP_PORT || 21 }}
           protocol:   ftps
-          local-dir:  ./${{ steps.out.outputs.dir }}/
+          local-dir:  ./publish/
           server-dir: ${{ steps.target.outputs.dir }}
           state-name: .ftp-deploy-state.json
 
       - name: Summary
         run: |
-          echo "Deployed **${{ steps.target.outputs.env }}** from \`${{ github.ref_name }}\` (build: ${{ steps.out.outputs.dir }}) to \`${{ steps.target.outputs.dir }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "Deployed **${{ steps.target.outputs.env }}** from \`${{ github.ref_name }}\` to \`${{ steps.target.outputs.dir }}\`" >> "$GITHUB_STEP_SUMMARY"
