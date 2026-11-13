@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+out/
+.cache/
+.vite/
+.next/
+.env
+.env.*
+*.log
+.DS_Store
+.ftp-deploy-state.json
