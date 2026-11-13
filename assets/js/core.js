@@ -119,7 +119,7 @@
     app: { name: 'Adaeze Okafor', email: 'admin@atlanticmeridian.com', role: 'Organisation Administrator', org: 'Atlantic Meridian Shipmanagement', portal: 'app', perms: ['*'] },
     vessel: { name: 'Capt. Marek Kowalski', email: 'master.aurora@atlanticmeridian.com', role: 'Vessel Master', org: 'Atlantic Meridian Shipmanagement', portal: 'vessel', vessel: 'ves_1', perms: ['crew.view', 'resthours.*', 'welfare.report', 'voyages.view'] },
     seafarer: { name: 'Emmanuel Adeyemi', email: 'e.adeyemi@mail.com', role: 'Seafarer', portal: 'seafarer', crewId: 'crw_1', perms: ['self'] },
-    platform: { name: 'Tunde Bakare', email: 'ops@nyotacore.com', role: 'Platform Administrator', org: 'NyotaCore Solutions & Services', portal: 'platform', perms: ['platform.*'] }
+    platform: { name: 'Tunde Bakare', email: 'ops@nyotacoreltd.com', role: 'Platform Administrator', org: 'NyotaCore Solutions & Services', portal: 'platform', perms: ['platform.*'] }
   };
   N.user = () => {
     let s = null; try { s = JSON.parse(localStorage.getItem('nyovara.session') || 'null'); } catch (e) {}
